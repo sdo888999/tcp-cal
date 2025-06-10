@@ -82,8 +82,8 @@
         <button onclick="adjustValue(5)">+5 MiB</button>
       </div>
       <h3>建议的 TCP 缓冲区设置：</h3>
-      <p>net.ipv4.tcp_wmem="4096 16384 <span id="recommendedWmem"></span>"</p>
-      <p>net.ipv4.tcp_rmem="4096 87380 <span id="recommendedRmem"></span>"</p>
+      <p>net.ipv4.tcp_rmem=4096 87380 <span id="recommendedRmem"></span></p>
+      <p>net.ipv4.tcp_wmem=4096 16384 <span id="recommendedWmem"></span></p>
       <button onclick="generateScript()">生成永久保存脚本</button>
       <div id="script" style="display: none;">
         <h3>永久保存脚本：</h3>
@@ -125,12 +125,12 @@
     function generateScript() {
       const scriptContent = `#!/bin/bash
 # 设置TCP缓冲区大小
-sysctl -w net.ipv4.tcp_wmem="4096 16384 ${currentBdpBytes}"
-sysctl -w net.ipv4.tcp_rmem="4096 87380 ${currentBdpBytes}"
+sysctl -w net.ipv4.tcp_wmem="4096 87380 ${currentBdpBytes}"
+sysctl -w net.ipv4.tcp_rmem="4096 16384 ${currentBdpBytes}"
 
 # 将设置写入/etc/sysctl.conf以便永久保存
-echo "net.ipv4.tcp_wmem = 4096 16384 ${currentBdpBytes}" >> /etc/sysctl.conf
-echo "net.ipv4.tcp_rmem = 4096 87380 ${currentBdpBytes}" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_wmem = 4096 87380 ${currentBdpBytes}" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_rmem = 4096 16384 ${currentBdpBytes}" >> /etc/sysctl.conf
 
 # 应用更改
 sysctl -p`;
